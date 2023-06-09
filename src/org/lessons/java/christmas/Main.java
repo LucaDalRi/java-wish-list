@@ -1,5 +1,9 @@
 package org.lessons.java.christmas;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,23 +16,60 @@ public class Main {
 
         listaRegali = new ArrayList<>();
 
-        System.out.println("Inserisci il regalo da memorizzare nella lista, scrivi stop per terminare il programma");
+        System.out.println("Inserisci il regalo da memorizzare nella lista, scrivi stop per terminare il programma, scrivi lista per visualizzare la lista creata precedentemente");
 
-        do {
-            Scanner s1 = new Scanner(System.in);
+        Scanner s1 = new Scanner(System.in);
 
-            String regalo = s1.nextLine();
+        String choice = s1.nextLine();
 
-            if (regalo.equals("stop") || regalo.isEmpty() || regalo.isBlank()){
-                break;
+        if (!choice.equals("lista")) {
+
+            do {
+
+                String regalo = s1.nextLine();
+
+                if (regalo.equals("stop") || regalo.isEmpty() || regalo.isBlank()) {
+                    break;
+                }
+
+                listaRegali.add(regalo);
+
+            } while (true);
+
+            try {
+
+                File lista = new File("src/org/lessons/java/christmas/lista.txt");
+                
+                FileWriter writer = new FileWriter("src/org/lessons/java/christmas/lista.txt");
+
+                writer.write(listaRegali.toString());
+
+                writer.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
-            listaRegali.add(regalo);
+            System.out.println("Lista completa:");
 
-        } while (true);
+            System.out.println(listaRegali);
 
-        System.out.println("Lista completa:");
+        } else {
 
-        System.out.println(listaRegali);
+            File lista = new File("src/org/lessons/java/christmas/lista.txt");
+
+            try {
+                Scanner reader = new Scanner(lista);
+                while (reader.hasNextLine()) {
+                    String data = reader.nextLine();
+                    System.out.println("Questa è la tua lista precedente");
+                    System.out.println(data);
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
     }
 }
